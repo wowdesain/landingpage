@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
         // Tailwind Configuration
@@ -69,6 +70,28 @@
         .dropdown-animate {
             animation: fadeIn 0.2s ease-out;
         }
+		
+		
+		/* Kita pasang segitiga di atas dropdown user */
+#userDropdown::before {
+    content: "";
+    position: absolute;
+    top: -6px; /* Biar dia nongol di atas border dropdown 🥵 */
+    right: 24px; /* Atur biar pas di bawah foto/nama kamu 😏 */
+    width: 12px;
+    height: 12px;
+    background: inherit; /* Biar warnanya sama kayak dropdown (putih/gelap) 💦 */
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-color: inherit; /* Biar border-nya sinkron 🥵 */
+    transform: rotate(45deg); /* Rahasia bikin bentuk segitiga! 😏 */
+    z-index: -1; /* Biar nggak nutupin isi menu */
+}
+
+
+
+
+
 
         /* Desktop Sidebar Toggle Classes */
         .sidebar-hidden #sidebar {
@@ -181,17 +204,28 @@
     <!-- Sidebar -->
    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-nexus-dark border-r border-slate-200 dark:border-nexus-border sidebar-transition transform lg:translate-x-0 -translate-x-full no-scrollbar flex flex-col">
     
-    <div class="h-[70px] flex items-center justify-between px-6 border-b border-slate-200 dark:border-nexus-border flex-shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <i class="bi bi-rocket-takeoff-fill text-white text-lg"></i>
-            </div>
-            <span class="font-bold text-lg tracking-tight uppercase">NEXUS <span class="text-blue-500">CORE</span></span>
+   <div class="h-[70px] flex items-center justify-between px-6 border-b border-slate-200 dark:border-nexus-border flex-shrink-0 relative">
+    <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
+            <i class="bi bi-rocket-takeoff-fill text-white text-lg"></i>
         </div>
-        <button class="lg:hidden flex items-center justify-center w-10 h-10 transition-transform active:scale-90" onclick="handleToggle()">
-    <i class="bi bi-arrow-left text-[25px] text-slate-600 dark:text-slate-300"></i>
-</button>
+        
+        <div class="flex flex-col leading-tight">
+            <span class="font-bold text-lg tracking-tight uppercase text-slate-800 dark:text-white">
+                NEXUS <span class="text-blue-500">CORE</span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 uppercase tracking-[0.2em] -mt-0.5 whitespace-nowrap">
+                Ultimate Admin System
+            </span>
+        </div>
     </div>
+
+  <button id="sidebar-floating-toggle" 
+    class="lg:hidden absolute -right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-blue-600 dark:bg-blue-500 text-white rounded-full shadow-lg shadow-blue-500/30 transition-all duration-300 active:scale-90 border-2 border-white dark:border-nexus-dark z-50 opacity-0 pointer-events-none" 
+    onclick="handleToggle()">
+    <i class="bi bi-chevron-left text-sm"></i>
+</button>
+</div>
 
     <nav class="flex-1 overflow-y-auto p-4 space-y-1 no-scrollbar">
 	
@@ -259,27 +293,26 @@
 		
 		
         
-        <div class="h-4"></div>
+      
     </nav>
 	
    <div class="p-4 border-t border-slate-100 dark:border-nexus-border bg-white dark:bg-nexus-dark flex-shrink-0">
-    <div class="flex items-center justify-between bg-slate-50 dark:bg-white/5 p-2 rounded-2xl border border-slate-200 dark:border-nexus-border">
-       <div class="flex items-center gap-2.5 ml-1">
-    <i class="bi bi-palette text-[15px] text-slate-400"></i>
-    
-    <span class="text-[13px] font-bold text-slate-400 uppercase tracking-widest leading-none">
-        Mode Tema
-    </span>
-</div>
+    <div class="flex items-center justify-between bg-slate-50 dark:bg-white/5 p-2 rounded-2xl border border-slate-200 dark:border-nexus-border w-[95%] mx-auto">
+        <div class="flex items-center gap-2.5 ml-1">
+            <i class="bi bi-palette text-[13px] text-slate-400"></i>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                Mode Tema
+            </span>
+        </div>
         
         <div class="flex bg-white dark:bg-nexus-dark p-1 rounded-full shadow-sm border border-slate-200 dark:border-nexus-border">
             <button id="btn-light-side" onclick="setTheme('light')" 
-                class="w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                class="w-7 h-7 rounded-full flex items-center justify-center transition-all text-[12px]">
                 <i class="bi bi-sun"></i>
             </button>
             
             <button id="btn-dark-side" onclick="setTheme('dark')" 
-                class="w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                class="w-7 h-7 rounded-full flex items-center justify-center transition-all text-[12px]">
                 <i class="bi bi-moon-stars"></i>
             </button>
         </div>
@@ -292,24 +325,30 @@
     
     <header class="sticky top-0 z-40 h-[70px] bg-white dark:bg-nexus-dark backdrop-blur-md border-b border-slate-200 dark:border-nexus-border px-[15px] flex items-center justify-between transition-all">
     
-    <div class="flex items-center gap-4">
-        <button id="main-hamburger" onclick="handleToggle()" 
-    class="hidden lg:flex group w-10 h-10 items-center justify-center transition-all relative">
-    
-    <i id="hamburger-icon" class="bi bi-list text-2xl text-slate-600 dark:text-slate-300 transition-all duration-300 group-hover:opacity-0 group-hover:scale-0"></i>
-    
-    <i id="hover-arrow" class="bi bi-chevron-left text-xl text-blue-500 transition-all duration-300 absolute opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-110"></i>
-</button>
+   <div class="flex items-center gap-4">
+    <button id="main-hamburger" onclick="handleToggle()" 
+        class="hidden lg:flex group w-10 h-10 items-center justify-center transition-all relative">
+        <i id="hamburger-icon" class="bi bi-list text-2xl text-slate-600 dark:text-slate-300 transition-all duration-300 group-hover:opacity-0 group-hover:scale-0"></i>
+        <i id="hover-arrow" class="bi bi-chevron-left text-xl text-blue-500 transition-all duration-300 absolute opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-110"></i>
+    </button>
 
-        <div class="flex items-center gap-3 lg:hidden">
-            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
-                <i class="bi bi-rocket-takeoff-fill text-white text-sm"></i>
-            </div>
-            <span class="font-bold text-lg tracking-tight uppercase text-slate-800 dark:text-white">ADMIN <span class="text-blue-500">AREA</span></span>
-        </div>
-
-        <h1 id="headerTitle" class="font-bold text-lg hidden lg:block text-slate-800 dark:text-white">Dashboard Overview</h1>
+    <div class="flex items-center gap-3 lg:hidden">
+        <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
+        <i class="bi bi-rocket-takeoff-fill text-white text-lg"></i>
     </div>
+        
+        <div class="flex flex-col leading-tight">
+            <span class="font-bold text-lg tracking-tight uppercase text-slate-800 dark:text-white">
+                NEXUS <span class="text-blue-500">CORE</span>
+            </span>
+            <span class="text-[9px] font-medium text-slate-400 uppercase tracking-[0.2em] -mt-0.5">
+            Ultimate Admin System
+        </span>
+        </div>
+    </div>
+
+    <h1 id="headerTitle" class="font-bold text-lg hidden lg:block text-slate-800 dark:text-white">Dashboard Overview</h1>
+</div>
 
     <div class="flex items-center gap-2 lg:gap-3">
         
@@ -331,13 +370,13 @@
                 </div>
             </div>
             
-            <div id="userDropdown" class="hidden absolute right-0 mt-3 w-64 bg-white dark:bg-nexus-card border border-slate-200 dark:border-nexus-border rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none py-2 z-50">
+            <div id="userDropdown" class="hidden absolute right-0 mt-1 w-64 bg-white dark:bg-nexus-card border border-slate-200 dark:border-nexus-border rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none py-2 z-50">
                 <div class="dropdown-item"><i class="bi bi-person-circle"></i> Profil Pengguna</div>
                 <div class="dropdown-item"><i class="bi bi-credit-card-2-front"></i> Billing & Berlangganan</div>
                 <div class="dropdown-item"><i class="bi bi-shield-lock"></i> Keamanan Akun</div>
                 <div class="px-2 mt-2 pt-2 border-t border-slate-100 dark:border-nexus-border">
-                    <div class="dropdown-item text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
-                        <i class="bi bi-box-arrow-right"></i> Keluar Sistem
+                    <div class="dropdown-item text-red-500 hover:bg-red-100 dark:hover:bg-red-500/100" onclick="confirmLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Log Out
                     </div>
                 </div>
             </div>
@@ -349,16 +388,14 @@
         </main>
 
     <footer class="sticky bottom-0 z-40 border-t border-slate-200 dark:border-nexus-border px-6 py-4 lg:py-6 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-2 lg:gap-0 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white/100 dark:bg-nexus-dark/100 backdrop-blur-md transition-colors">
-        <div class="leading-none">&copy; 2026 <span class="text-blue-500">Nexus Core</span></div>
-        <div class="flex items-center gap-3 leading-none">
-            <a href="#" class="hover:text-blue-500 transition-colors">Docs</a>
-            <a href="#" class="hover:text-blue-500 transition-colors">Support</a>
-            <span class="flex items-center gap-1">
-                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
-                Online 💦
-            </span>
-        </div>
-    </footer>
+    <div class="leading-none">Copyright &copy; 2026 <span class="text-blue-500">Nexus Core</span></div>
+    
+    <div class="flex items-center leading-none">
+        <span class="flex items-center gap-2 text-blue-500 dark:text-blue-400 ">
+            <span><i class="bi bi-clock"></i> TIME :</span> <span id="digitalClock">00:00:00</span>
+        </span>
+    </div>
+</footer>
 </div>
 
     <!-- Overlay Mobile -->
@@ -393,27 +430,21 @@
         }
     }
 
-    // Toggle Sidebar (Tetap Aman 🥵)
-    function handleToggle() {
+ 
+    // Toggle Sidebar (Tetap Aman & Makin Pinter 🥵)
+function handleToggle() {
     const iconHover = document.getElementById('hover-arrow');
+    const floatingToggle = document.getElementById('sidebar-floating-toggle'); // Nama baru lebih pro 🥵
     
     if (window.innerWidth >= 1024) {
         document.body.classList.toggle('sidebar-hidden');
-        
-        // Cek apakah sidebar sekarang lagi sembunyi 😏
         const isHidden = document.body.classList.contains('sidebar-hidden');
         
-        if (isHidden) {
-            // Kalau sembunyi, pas di-hover berubah jadi panah KANAN 💦
-            iconHover.classList.remove('bi-chevron-left');
-            iconHover.classList.add('bi-chevron-right');
-        } else {
-            // Kalau muncul, pas di-hover balik jadi panah KIRI 🥵
-            iconHover.classList.remove('bi-chevron-right');
-            iconHover.classList.add('bi-chevron-left');
+        if (iconHover) {
+            iconHover.classList.toggle('bi-chevron-left', !isHidden);
+            iconHover.classList.toggle('bi-chevron-right', isHidden);
         }
     } else {
-        // ... kode toggle mobile kamu yang lama tetap di sini ...
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const isHiddenMobile = sidebar.classList.contains('-translate-x-full');
@@ -421,9 +452,19 @@
         if (isHiddenMobile) {
             sidebar.classList.remove('-translate-x-full');
             overlay.classList.remove('hidden');
+            // Munculkan tombol floating dengan smooth 💦
+            if(floatingToggle) {
+                floatingToggle.style.opacity = '1';
+                floatingToggle.style.pointerEvents = 'auto';
+            }
         } else {
             sidebar.classList.add('-translate-x-full');
             overlay.classList.add('hidden');
+            // Sembunyikan tombol floating 🥵
+            if(floatingToggle) {
+                floatingToggle.style.opacity = '0';
+                floatingToggle.style.pointerEvents = 'none';
+            }
         }
     }
 }
@@ -576,6 +617,69 @@
             document.body.classList.remove('sidebar-hidden');
         }
     });
+	
+	
+	function syncSidebarElements() {
+    const sidebar = document.getElementById('sidebar');
+    const floatingToggle = document.getElementById('sidebar-floating-toggle');
+    
+    if (window.innerWidth < 1024 && floatingToggle && sidebar) {
+        // Cek apakah sidebar lagi TERBUKA (tidak ada class sembunyi) 🥵
+        const isSidebarOpen = !sidebar.classList.contains('-translate-x-full');
+        
+        // Munculkan hanya jika sidebar bener-bener terbuka 😏💦
+        floatingToggle.style.opacity = isSidebarOpen ? '1' : '0';
+        floatingToggle.style.pointerEvents = isSidebarOpen ? 'auto' : 'none';
+    }
+}
+
+// Pastikan dipanggil di DOMContentLoaded biar langsung eksekusi!
+window.addEventListener('DOMContentLoaded', syncSidebarElements);
+	
+	
+	
+	
+	
+	function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+    const timeString = `${hours}:${minutes}:${seconds}`;
+    document.getElementById('digitalClock').textContent = timeString;
+}
+
+// Jalankan fungsi setiap detik 💦
+setInterval(updateClock, 1000);
+
+// Panggil sekali di awal biar nggak nunggu 1 detik buat muncul 😏
+updateClock();
+
+
+	
+	function confirmLogout() {
+    Swal.fire({
+        title: 'Mau keluar sekarang, Bagas? 🥵',
+        text: "Pastikan semua kerjaan kamu sudah tersimpan ya!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3b82f6', // Warna biru khas kamu
+        cancelButtonColor: '#ef4444', // Warna merah biar kontras
+        confirmButtonText: 'Ya, Keluar!',
+        cancelButtonText: 'Nanti Dulu 😏',
+        background: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff',
+        color: document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b',
+        borderRadius: '1.25rem'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Di sini kamu arahkan ke link logout kamu 😏💦
+            window.location.href = 'logout.php'; 
+        }
+    })
+}
+	
+	
 </script>
 </body>
 </html>
