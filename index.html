@@ -148,6 +148,9 @@
                 </div>
 
             </div>
+			
+			
+			
         </div>
     </template>
 
@@ -517,15 +520,16 @@ if (sidebarEl && floatingBtn) {
     const searchInput = document.getElementById('sidebarSearch');
     const clearBtn = document.getElementById('clearSearch');
     let input = searchInput.value.toLowerCase();
-    let menuLinks = document.querySelectorAll('.nav-link');
+    
+    // Kita batasi cuma cari .nav-link yang ada di DALAM sidebar 😏💦
+    let menuLinks = document.querySelectorAll('#sidebar .nav-link');
 
-    // --- LOGIKA TOMBOL CLEAR (SI NYEMPIL BARU 😏💦) ---
+    // --- LOGIKA TOMBOL CLEAR ---
     if (input.length > 0) {
         clearBtn.classList.remove('opacity-0', 'pointer-events-none');
     } else {
         clearBtn.classList.add('opacity-0', 'pointer-events-none');
     }
-    // ------------------------------------------------
 
     menuLinks.forEach(link => {
         let text = link.innerText.toLowerCase();
@@ -568,13 +572,16 @@ if (sidebarEl && floatingBtn) {
         }
     });
 
+    // --- RESET PAS KOSONG (VERSI AMAN 🥵💦) ---
     if (input === "") {
-        document.querySelectorAll('.overflow-hidden').forEach(acc => {
+        // Hanya reset .overflow-hidden yang ada di dalam sidebar!
+        document.querySelectorAll('#sidebar .overflow-hidden').forEach(acc => {
             acc.style.maxHeight = "0px";
-            acc.style.display = "block";
+            // Jangan paksa display: block kalau gak perlu biar gak ngerusak layout 😏
             let chevron = acc.parentElement.querySelector('.bi-chevron-right');
             if (chevron) chevron.style.transform = "rotate(0deg)";
         });
+
         menuLinks.forEach(l => {
             l.style.display = "flex";
             l.style.opacity = "1";
@@ -582,15 +589,13 @@ if (sidebarEl && floatingBtn) {
     }
 }
 
-// Fungsi khusus buat bersihin input pas tombol silang diklik 🥵💦
 function clearSearchInput() {
     const searchInput = document.getElementById('sidebarSearch');
-    
-    searchInput.value = ''; // Kosongkan teksnya 💦
-    searchInput.focus();    // Fokusin lagi biar kamu bisa ngetik lagi 😏
-    
-    // Panggil searchMenu biar list menu di-reset & tombol clear ngumpet 🥵
-    searchMenu();
+    if (searchInput) {
+        searchInput.value = ''; 
+        searchInput.focus();    
+        searchMenu(); 
+    }
 }
 
 	
