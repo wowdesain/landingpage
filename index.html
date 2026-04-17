@@ -1,298 +1,581 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexGen Solutions | Profil Perusahaan</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
+    <title>Nexus Core v4.0 - Tailwind Edition</title>
+    
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script>
+        // Tailwind Configuration
+        window.tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        nexus: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        };
+
+        // Theme initialization
+        (function() {
+            const savedTheme = localStorage.getItem('nexus_theme') || 'light';
+            document.documentElement.className = savedTheme;
+        })();
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer components {
+            .nav-link {
+                @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer font-medium opacity-70 hover:opacity-100 hover:bg-blue-500/10 hover:text-blue-500 dark:text-slate-300;
+            }
+            .nav-link.active {
+                @apply opacity-100 bg-blue-500 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-600 hover:text-white;
+            }
+            .nexus-card {
+                @apply bg-white dark:bg-nexus-card border border-slate-200 dark:border-nexus-border rounded-2xl shadow-sm transition-all duration-300;
+            }
+            .sidebar-transition {
+                @apply transition-all duration-300 ease-in-out;
+            }
+            .dropdown-item {
+                @apply flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer rounded-lg mx-1;
+            }
         }
-        .navbar {
-            transition: all 0.3s ease;
-            padding: 1rem 0;
+        
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .hero-section {
-            background: #1a1a1a; 
-            /* Gambar Bangunan Kantor Modern */
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            color: white;
+        
+        .dropdown-animate {
+            animation: fadeIn 0.2s ease-out;
         }
-        .section-padding {
-            padding: 80px 0;
+
+        /* Desktop Sidebar Toggle Classes */
+        .sidebar-hidden #sidebar {
+            @apply -translate-x-full;
         }
-        .card {
-            border: none;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .card:hover {
-            transform: translateY(-10px);
-        }
-        .icon-box {
-            width: 60px;
-            height: 60px;
-            background: #0d6efd;
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        .footer {
-            background: #212529;
-            color: white;
-            padding: 50px 0;
-        }
-        .portfolio-img {
-            height: 250px;
-            object-fit: cover;
-            background-color: #f8f9fa;
+        .sidebar-hidden #main-container {
+            @apply ml-0;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-nexus-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">NEXGEN</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">Tentang Kami</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Layanan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#portfolio">Portofolio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Kontak</a></li>
-                </ul>
+    <!-- Templates -->
+    <template id="tpl-dashboard">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-[fadeIn_0.4s_ease-out]">
+            <div class="nexus-card p-6 border-l-4 border-l-blue-500">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Pendapatan</p>
+                <div class="flex items-end gap-2">
+                    <h3 class="text-2xl font-bold">Rp 128.5M</h3>
+                    <span class="text-green-500 text-sm font-medium mb-1"><i class="bi bi-graph-up"></i> +15%</span>
+                </div>
+            </div>
+            <div class="nexus-card p-6 border-l-4 border-l-purple-500">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Pengguna</p>
+                <div class="flex items-end gap-2">
+                    <h3 class="text-2xl font-bold">12,402</h3>
+                    <span class="text-green-500 text-sm font-medium mb-1"><i class="bi bi-graph-up"></i> +8%</span>
+                </div>
+            </div>
+            <div class="nexus-card p-6 border-l-4 border-l-orange-500">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Order</p>
+                <div class="flex items-end gap-2">
+                    <h3 class="text-2xl font-bold">1,894</h3>
+                    <span class="text-blue-500 text-sm font-medium mb-1"><i class="bi bi-activity"></i> Stabil</span>
+                </div>
+            </div>
+            <div class="nexus-card p-6 border-l-4 border-l-emerald-500">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">System Load</p>
+                <div class="flex items-end gap-2">
+                    <h3 class="text-2xl font-bold">0.02%</h3>
+                    <span class="text-green-500 text-sm font-medium mb-1"><i class="bi bi-shield-check"></i> Aman</span>
+                </div>
+            </div>
+            <div class="col-span-full">
+                <div class="nexus-card p-12 text-center overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/5 rounded-full -ml-16 -mb-16 blur-3xl"></div>
+                    
+                    <div class="w-16 h-16 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10">
+                        <i class="bi bi-lightning-charge-fill text-3xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold mb-2 text-slate-800 dark:text-white relative z-10">Dashboard Siap, Kak Bagas!</h2>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto relative z-10 text-sm">Semua data sinkron dan sistem berjalan dalam performa puncak 🥵.</p>
+                </div>
+
             </div>
         </div>
+    </template>
+
+    <template id="tpl-statistik">
+        <div class="nexus-card p-12 text-center animate-[fadeIn_0.4s_ease-out]">
+            <i class="bi bi-pie-chart-fill text-5xl text-blue-500/30 mb-4 block"></i>
+            <h5 class="text-lg font-bold">Data Real-time</h5>
+            <p class="text-slate-500">Visualisasi data statistik akan ditampilkan di sini.</p>
+        </div>
+    </template>
+
+    <template id="tpl-member">
+        <div class="nexus-card overflow-hidden animate-[fadeIn_0.4s_ease-out]">
+            <div class="p-5 border-b border-slate-200 dark:border-nexus-border flex justify-between items-center bg-slate-50/50 dark:bg-white/5">
+                <h6 class="font-bold">Daftar Pengguna</h6>
+                <button class="text-xs bg-blue-500 text-white px-3 py-1.5 rounded-lg hover:bg-blue-600 transition-colors">Tambah Data</button>
+            </div>
+            <div class="p-12 text-center" id="member-container">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500/20 border-t-blue-500 mb-3"></div>
+                <p class="text-slate-500">Menghubungkan ke Database PHP... 💦</p>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-setting">
+        <div class="nexus-card p-8 animate-[fadeIn_0.4s_ease-out]">
+            <h5 class="text-lg font-bold mb-6 flex items-center gap-2">
+                <i class="bi bi-sliders text-blue-500"></i> Konfigurasi Sistem
+            </h5>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-transparent hover:border-blue-500/20 transition-all">
+                    <div>
+                        <p class="font-medium">Notifikasi Email</p>
+                        <p class="text-xs text-slate-500">Kirim laporan harian ke email</p>
+                    </div>
+                    <div class="w-12 h-6 bg-blue-500 rounded-full relative cursor-pointer group transition-colors" onclick="this.classList.toggle('bg-slate-400'); this.classList.toggle('bg-blue-500')">
+                        <div class="absolute right-1 top-1 bg-white w-4 h-4 rounded-full transition-all"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+	
+	
+	
+	<template id="tpl-testimoni">
+        <div class="nexus-card p-8 animate-[fadeIn_0.4s_ease-out]">
+            halaman testimoni
+        </div>
+    </template>
+	
+	
+
+    <!-- Sidebar -->
+   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-nexus-dark border-r border-slate-200 dark:border-nexus-border sidebar-transition transform lg:translate-x-0 -translate-x-full no-scrollbar flex flex-col">
+    
+    <div class="h-[70px] flex items-center justify-between px-6 border-b border-slate-200 dark:border-nexus-border flex-shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i class="bi bi-rocket-takeoff-fill text-white text-lg"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight uppercase">NEXUS <span class="text-blue-500">CORE</span></span>
+        </div>
+        <button class="lg:hidden flex items-center justify-center w-10 h-10 transition-transform active:scale-90" onclick="handleToggle()">
+    <i class="bi bi-arrow-left text-[25px] text-slate-600 dark:text-slate-300"></i>
+</button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto p-4 space-y-1 no-scrollbar">
+	
+	<div class="px-2 mb-4 w-full flex justify-center"> 
+   <div class="relative group w-[250px]">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <i class="bi bi-search text-slate-400 group-focus-within:text-blue-500 transition-colors text-xs"></i>
+        </span>
+        
+        <input type="text" id="sidebarSearch" onkeyup="searchMenu()"
+            class="w-full bg-slate-100 dark:bg-white/5 border-none rounded-xl py-2 pl-9 pr-4 text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:ring-2 focus:ring-blue-500/50 transition-all outline-none"
+            placeholder="Cari Menu...">
+    </div>
+</div>
+
+        
+		
+        <a onclick="navigate('dashboard', this, 'Dashboard Overview')" class="nav-link active">
+            <i class="bi bi-grid-1x2-fill"></i> Beranda
+        </a>
+        <a onclick="navigate('statistik', this, 'Statistik Bisnis', 'bi bi-bar-chart-fill')" class="nav-link">
+            <i class="bi bi-bar-chart-fill"></i> Statistik
+        </a>
+        <a onclick="navigate('member', this, 'Manajemen Member', 'bi-people-fill')" class="nav-link">
+        <i class="bi bi-people-fill"></i> Anggota
+        </a>
+		
+        
+        <div class="px-2 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-[2px]">Admin</div>
+		
+        <a onclick="navigate('setting', this, 'Pengaturan Sistem', 'bi bi-gear-fill')" class="nav-link">
+            <i class="bi bi-gear-fill"></i> Pengaturan
+        </a>
+		
+		
+		<a onclick="navigate('testimoni', this, 'Input Testimoni', 'bi bi-gear-fill')" class="nav-link">
+            <i class="bi bi-gear-fill"></i> Input Testimoni
+        </a>
+		
+		<div class="relative">
+        <div onclick="toggleAccordion('settingsMenu', 'chevronIcon')" 
+            class="nav-link flex items-center justify-between cursor-pointer">
+            <div class="flex items-center gap-3">
+                <i class="bi bi-gear-fill"></i> Pengaturan Sistem
+            </div>
+            <i id="chevronIcon" class="bi bi-chevron-right text-[10px] transition-transform duration-300"></i>
+        </div>
+
+        <div id="settingsMenu" class="overflow-hidden max-h-0 transition-all duration-500 ease-in-out pl-7">
+            <a onclick="navigate('profil', this, 'Profil Pengguna')" class="nav-link !text-[13px] opacity-80 hover:opacity-100">
+                <i class="bi bi-person-circle"></i> Profil Pengguna
+            </a>
+            <a onclick="navigate('keamanan', this, 'Keamanan Akun')" class="nav-link !text-[13px] opacity-80 hover:opacity-100">
+                <i class="bi bi-shield-lock"></i> Keamanan Akun 💦
+            </a>
+            <a onclick="navigate('billing', this, 'Billing & Langganan')" class="nav-link !text-[13px] opacity-80 hover:opacity-100">
+                <i class="bi bi-credit-card"></i> Billing 🥵
+            </a>
+        </div>
+    </div>
+	
+	
+	
+</div>
+		
+		
+        
+        <div class="h-4"></div>
     </nav>
+	
+   <div class="p-4 border-t border-slate-100 dark:border-nexus-border bg-white dark:bg-nexus-dark flex-shrink-0">
+    <div class="flex items-center justify-between bg-slate-50 dark:bg-white/5 p-2 rounded-2xl border border-slate-200 dark:border-nexus-border">
+       <div class="flex items-center gap-2.5 ml-1">
+    <i class="bi bi-palette text-[15px] text-slate-400"></i>
+    
+    <span class="text-[13px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+        Mode Tema
+    </span>
+</div>
+        
+        <div class="flex bg-white dark:bg-nexus-dark p-1 rounded-full shadow-sm border border-slate-200 dark:border-nexus-border">
+            <button id="btn-light-side" onclick="setTheme('light')" 
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                <i class="bi bi-sun"></i>
+            </button>
+            
+            <button id="btn-dark-side" onclick="setTheme('dark')" 
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                <i class="bi bi-moon-stars"></i>
+            </button>
+        </div>
+    </div>
+</div>
+</aside>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero-section text-center">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <h1 class="display-3 fw-bold mb-4">Solusi Digital Masa Depan untuk Bisnis Anda</h1>
-                    <p class="lead mb-5">Kami membantu transformasi digital perusahaan Anda dengan teknologi mutakhir dan tim ahli yang berpengalaman.</p>
-                    <div class="d-grid gap-2 d-md-block">
-                        <a href="#about" class="btn btn-primary btn-lg px-5 py-3 me-md-2">Mulai Sekarang</a>
-                        <a href="#contact" class="btn btn-outline-light btn-lg px-5 py-3">Konsultasi Gratis</a>
+    <!-- Main Content -->
+ <div id="main-container" class="flex-1 flex flex-col sidebar-transition lg:ml-[280px]">
+    
+    <header class="sticky top-0 z-40 h-[70px] bg-white dark:bg-nexus-dark backdrop-blur-md border-b border-slate-200 dark:border-nexus-border px-[15px] flex items-center justify-between transition-all">
+    
+    <div class="flex items-center gap-4">
+        <button id="main-hamburger" onclick="handleToggle()" 
+    class="hidden lg:flex group w-10 h-10 items-center justify-center transition-all relative">
+    
+    <i id="hamburger-icon" class="bi bi-list text-2xl text-slate-600 dark:text-slate-300 transition-all duration-300 group-hover:opacity-0 group-hover:scale-0"></i>
+    
+    <i id="hover-arrow" class="bi bi-chevron-left text-xl text-blue-500 transition-all duration-300 absolute opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-110"></i>
+</button>
+
+        <div class="flex items-center gap-3 lg:hidden">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
+                <i class="bi bi-rocket-takeoff-fill text-white text-sm"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight uppercase text-slate-800 dark:text-white">ADMIN <span class="text-blue-500">AREA</span></span>
+        </div>
+
+        <h1 id="headerTitle" class="font-bold text-lg hidden lg:block text-slate-800 dark:text-white">Dashboard Overview</h1>
+    </div>
+
+    <div class="flex items-center gap-2 lg:gap-3">
+        
+        <button onclick="handleToggle()" class="lg:hidden w-12 h-12 flex items-center justify-center -mr-[15px]">
+    <i class="bi bi-list text-[30px] text-slate-600 dark:text-slate-300 leading-none"></i>
+</button>
+
+        <div class="relative">
+            <div id="userMenuBtn" onclick="toggleDropdown(event)" 
+                class="flex items-center gap-3 cursor-pointer p-1.5 rounded-full transition-all duration-300">
+                
+                <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                    B
+                </div>
+
+                <div class="hidden lg:flex flex-col items-start leading-tight">
+                    <span class="text-sm font-bold text-slate-700 dark:text-white transition-colors duration-300">Bagas</span>
+                    <span class="text-[10px] font-medium text-blue-500 uppercase tracking-wider">Administrator</span>
+                </div>
+            </div>
+            
+            <div id="userDropdown" class="hidden absolute right-0 mt-3 w-64 bg-white dark:bg-nexus-card border border-slate-200 dark:border-nexus-border rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none py-2 z-50">
+                <div class="dropdown-item"><i class="bi bi-person-circle"></i> Profil Pengguna</div>
+                <div class="dropdown-item"><i class="bi bi-credit-card-2-front"></i> Billing & Berlangganan</div>
+                <div class="dropdown-item"><i class="bi bi-shield-lock"></i> Keamanan Akun</div>
+                <div class="px-2 mt-2 pt-2 border-t border-slate-100 dark:border-nexus-border">
+                    <div class="dropdown-item text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
+                        <i class="bi bi-box-arrow-right"></i> Keluar Sistem
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</header>
 
-    <!-- About Section -->
-    <section id="about" class="section-padding">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <!-- Image of Tim Profesional -->
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" 
-                         alt="Tim Kami" 
-                         class="img-fluid rounded-3 shadow"
-                         onerror="this.src='https://placehold.co/800x600?text=Tim+Kami'">
-                </div>
-                <div class="col-lg-6 ps-lg-5">
-                    <h2 class="fw-bold mb-4">Membangun Keunggulan Melalui Inovasi</h2>
-                    <p class="text-muted">Didirikan pada tahun 2015, NexGen Solutions telah membantu lebih dari 200 perusahaan di seluruh dunia untuk mencapai target digital mereka. Fokus kami adalah pada kualitas, skalabilitas, dan kepuasan klien.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Tim Profesional Bersertifikat</li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Teknologi Cloud-Native Terbaru</li>
-                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Dukungan Teknis 24/7</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+    <main id="mainContent" class="p-6 md:p-8 flex-1">
+        </main>
 
-    <!-- Services Section -->
-    <section id="services" class="section-padding bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Layanan Unggulan</h2>
-                <p class="text-muted">Kami menawarkan berbagai solusi untuk kebutuhan digital Anda.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 p-4">
-                        <div class="icon-box">
-                            <i class="bi bi-laptop"></i>
-                        </div>
-                        <h3>Web Development</h3>
-                        <p class="text-muted">Pembuatan website responsif, cepat, dan aman untuk meningkatkan branding bisnis Anda.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 p-4">
-                        <div class="icon-box">
-                            <i class="bi bi-phone"></i>
-                        </div>
-                        <h3>Mobile App</h3>
-                        <p class="text-muted">Pengembangan aplikasi Android dan iOS dengan antarmuka pengguna yang intuitif.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 p-4">
-                        <div class="icon-box">
-                            <i class="bi bi-graph-up-arrow"></i>
-                        </div>
-                        <h3>Digital Marketing</h3>
-                        <p class="text-muted">Strategi pemasaran SEO, SEM, dan media sosial untuk menjangkau target pasar yang tepat.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="section-padding">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Proyek Terbaru</h2>
-                <p class="text-muted">Beberapa karya terbaik yang telah kami selesaikan.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card overflow-hidden">
-                        <!-- Gambar Laptop Kerja -->
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" 
-                             class="portfolio-img card-img-top" 
-                             alt="E-Commerce Project"
-                             onerror="this.src='https://placehold.co/600x400?text=Web+Project'">
-                        <div class="card-body">
-                            <h5 class="fw-bold">E-Commerce Dashboard</h5>
-                            <p class="small text-muted">Web Design / Development</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card overflow-hidden">
-                        <!-- Gambar Grafik Data / Analytics -->
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" 
-                             class="portfolio-img card-img-top" 
-                             alt="Data Analytics"
-                             onerror="this.src='https://placehold.co/600x400?text=Data+Analytics'">
-                        <div class="card-body">
-                            <h5 class="fw-bold">Data Analytics App</h5>
-                            <p class="small text-muted">Mobile App</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card overflow-hidden">
-                        <!-- Gambar Ruang Rapat -->
-                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" 
-                             class="portfolio-img card-img-top" 
-                             alt="Financial Project"
-                             onerror="this.src='https://placehold.co/600x400?text=Corporate+Project'">
-                        <div class="card-body">
-                            <h5 class="fw-bold">Financial Solutions</h5>
-                            <p class="small text-muted">Corporate Design</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section-padding bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center mb-5">
-                    <h2 class="fw-bold">Hubungi Kami</h2>
-                    <p class="text-muted">Siap untuk memulai proyek besar Anda? Kirimkan pesan sekarang.</p>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <form id="contactForm">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control p-3" placeholder="Masukkan nama Anda">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control p-3" placeholder="nama@email.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Pesan</label>
-                            <textarea class="form-control p-3" rows="5" placeholder="Apa yang bisa kami bantu?"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-primary w-100 py-3" onclick="handleForm()">Kirim Pesan</button>
-                    </form>
-                    <div id="statusBox" class="mt-3 p-3 text-center rounded d-none"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <h4 class="fw-bold mb-4">NEXGEN</h4>
-                    <p class="text-muted">Solusi teknologi terpercaya untuk pertumbuhan bisnis Anda secara berkelanjutan di era digital.</p>
-                </div>
-                <div class="col-lg-4 ps-lg-5">
-                    <h5 class="mb-4">Tautan Cepat</h5>
-                    <ul class="list-unstyled text-muted">
-                        <li class="mb-2"><a href="#home" class="text-decoration-none text-muted">Beranda</a></li>
-                        <li class="mb-2"><a href="#about" class="text-decoration-none text-muted">Tentang Kami</a></li>
-                        <li class="mb-2"><a href="#services" class="text-decoration-none text-muted">Layanan</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <h5 class="mb-4">Ikuti Kami</h5>
-                    <div class="d-flex gap-3 fs-4">
-                        <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <hr class="mt-5 mb-4 border-secondary">
-            <div class="text-center text-muted">
-                <p>&copy; 2024 NexGen Solutions. Hak Cipta Dilindungi.</p>
-            </div>
+    <footer class="sticky bottom-0 z-40 border-t border-slate-200 dark:border-nexus-border px-6 py-4 lg:py-6 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-2 lg:gap-0 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white/100 dark:bg-nexus-dark/100 backdrop-blur-md transition-colors">
+        <div class="leading-none">&copy; 2026 <span class="text-blue-500">Nexus Core</span></div>
+        <div class="flex items-center gap-3 leading-none">
+            <a href="#" class="hover:text-blue-500 transition-colors">Docs</a>
+            <a href="#" class="hover:text-blue-500 transition-colors">Support</a>
+            <span class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
+                Online 💦
+            </span>
         </div>
     </footer>
+</div>
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <!-- Overlay Mobile -->
+    <div id="overlay" onclick="handleToggle()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
     <script>
-        function handleForm() {
-            const statusBox = document.getElementById('statusBox');
-            statusBox.classList.remove('d-none', 'alert-success');
-            statusBox.classList.add('alert-success', 'alert');
-            statusBox.innerHTML = 'Terima kasih Ian! Pesan Anda telah terkirim. Kami akan segera menghubungi Anda.';
-            
-            document.getElementById('contactForm').reset();
+    // Fungsi navigasi menu (Sudah Kakak Update Ikonnya 😏💦)
+    function navigate(pageId, element, title, iconClass = 'bi-grid-1x2-fill') {
+        const container = document.getElementById('mainContent');
+        const template = document.getElementById(`tpl-${pageId}`);
+        
+        if (template) {
+            container.innerHTML = '';
+            container.appendChild(template.content.cloneNode(true));
         }
-    </script>
+
+        // Sekarang title-nya pakai ikon biar makin seksi 🥵
+        const headerTitle = document.getElementById('headerTitle');
+        headerTitle.innerHTML = `
+            <div class="flex items-center gap-3">
+                <i class="bi ${iconClass} text-blue-500"></i>
+                <span>${title}</span>
+            </div>
+        `;
+
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        if(element) element.classList.add('active');
+
+        if(window.innerWidth < 1024) {
+            document.body.classList.remove('sidebar-hidden');
+            toggleMobileSidebar(false);
+        }
+    }
+
+    // Toggle Sidebar (Tetap Aman 🥵)
+    function handleToggle() {
+    const iconHover = document.getElementById('hover-arrow');
+    
+    if (window.innerWidth >= 1024) {
+        document.body.classList.toggle('sidebar-hidden');
+        
+        // Cek apakah sidebar sekarang lagi sembunyi 😏
+        const isHidden = document.body.classList.contains('sidebar-hidden');
+        
+        if (isHidden) {
+            // Kalau sembunyi, pas di-hover berubah jadi panah KANAN 💦
+            iconHover.classList.remove('bi-chevron-left');
+            iconHover.classList.add('bi-chevron-right');
+        } else {
+            // Kalau muncul, pas di-hover balik jadi panah KIRI 🥵
+            iconHover.classList.remove('bi-chevron-right');
+            iconHover.classList.add('bi-chevron-left');
+        }
+    } else {
+        // ... kode toggle mobile kamu yang lama tetap di sini ...
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const isHiddenMobile = sidebar.classList.contains('-translate-x-full');
+        
+        if (isHiddenMobile) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+}
+
+    function toggleMobileSidebar(forceOpen) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        if (forceOpen) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+
+    function toggleDropdown(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.classList.toggle('hidden');
+    }
+	
+	
+	function toggleAccordion(menuId, iconId) {
+    const menu = document.getElementById(menuId);
+    const icon = document.getElementById(iconId);
+
+    if (menu.style.maxHeight === "0px" || !menu.style.maxHeight) {
+        menu.style.maxHeight = "200px"; // Kasih batas yang cukup buat sub-menunya 🥵
+        icon.classList.add('rotate-90'); // Panahnya muter ke bawah pas dibuka 💦
+    } else {
+        menu.style.maxHeight = "0px";
+        icon.classList.remove('rotate-90'); // Panahnya balik lagi 😏
+    }
+}
+	
+	
+	
+	function searchMenu() {
+    let input = document.getElementById('sidebarSearch').value.toLowerCase();
+    let menuLinks = document.querySelectorAll('.nav-link');
+
+    menuLinks.forEach(link => {
+        let text = link.innerText.toLowerCase();
+        let isMatch = text.includes(input);
+        
+        // Cek apakah menu ini punya sub-menu (dia adalah parent)
+        let subMenuContainer = link.nextElementSibling;
+        let isParent = subMenuContainer && subMenuContainer.id.includes('Menu');
+
+        if (isMatch) {
+            link.style.display = "flex";
+            link.style.opacity = "1";
+
+            // Kalo induknya cocok, semua anaknya WAJIB muncul 😏💦
+            if (isParent) {
+                let children = subMenuContainer.querySelectorAll('.nav-link');
+                children.forEach(child => {
+                    child.style.display = "flex";
+                    child.style.opacity = "1";
+                });
+                subMenuContainer.style.display = "block";
+            }
+
+            // Kalo ini anak yang cocok, buka jalan induknya 🥵
+            let parentAccordion = link.closest('.overflow-hidden');
+            if (parentAccordion) {
+                parentAccordion.style.display = "block";
+                parentAccordion.style.maxHeight = "500px";
+                let chevron = parentAccordion.parentElement.querySelector('.bi-chevron-right');
+                if (chevron) chevron.style.transform = "rotate(90deg)";
+            }
+        } else {
+            // Sembunyikan kalau gak cocok, TAPI...
+            // Jangan sembunyiin kalo dia adalah anak dari parent yang lagi cocok! 💦
+            let parentLink = link.closest('.overflow-hidden')?.previousElementSibling;
+            let parentMatches = parentLink && parentLink.innerText.toLowerCase().includes(input);
+
+            if (!parentMatches) {
+                link.style.display = "none";
+                link.style.opacity = "0";
+            } else {
+                link.style.display = "flex";
+                link.style.opacity = "1";
+            }
+        }
+    });
+
+    // Reset pas input kosong 💦😏
+    if (input === "") {
+        document.querySelectorAll('.overflow-hidden').forEach(acc => {
+            acc.style.maxHeight = "0px";
+            acc.style.display = "block";
+            let chevron = acc.parentElement.querySelector('.bi-chevron-right');
+            if (chevron) chevron.style.transform = "rotate(0deg)";
+        });
+        menuLinks.forEach(l => {
+            l.style.display = "flex";
+            l.style.opacity = "1";
+        });
+    }
+}
+
+	
+
+    // FUNGSI TEMA YANG SUDAH KAKAK SEMPURNAKAN 😏💦
+    function setTheme(mode) {
+        document.documentElement.className = mode;
+        localStorage.setItem('nexus_theme', mode);
+        
+        const btnLight = document.getElementById('btn-light-side');
+        const btnDark = document.getElementById('btn-dark-side');
+
+        if (btnLight && btnDark) {
+            if(mode === 'dark') {
+                btnDark.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                btnDark.classList.remove('text-slate-400');
+                btnLight.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                btnLight.classList.add('text-slate-400');
+            } else {
+                btnLight.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                btnLight.classList.remove('text-slate-400');
+                btnDark.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                btnDark.classList.add('text-slate-400');
+            }
+        }
+    }
+
+    // Tutup dropdown kalau klik di luar 😏
+    window.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('userDropdown');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        if (dropdown && !dropdown.contains(e.target) && !userMenuBtn.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // INISIALISASI SAAT LOAD (Konten Langsung Muncul! 🥵💦)
+    window.addEventListener('load', () => {
+        const savedTheme = localStorage.getItem('nexus_theme') || 'light';
+        setTheme(savedTheme);
+        
+        // Default awal pakai ikon dashboard biar mantap 💦
+        const firstLink = document.querySelector('.nav-link');
+        navigate('dashboard', firstLink, 'Dashboard Overview', 'bi-grid-1x2-fill');
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth < 1024) {
+            document.body.classList.remove('sidebar-hidden');
+        }
+    });
+</script>
 </body>
 </html>
