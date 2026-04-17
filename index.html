@@ -432,41 +432,46 @@
 
  
     // Toggle Sidebar (Tetap Aman & Makin Pinter 🥵)
+// Satu Fungsi buat Semua (Clean & Seksi 😏💦)
 function handleToggle() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const floatingBtn = document.getElementById('sidebar-floating-toggle');
     const iconHover = document.getElementById('hover-arrow');
-    const floatingToggle = document.getElementById('sidebar-floating-toggle'); // Nama baru lebih pro 🥵
-    
+
     if (window.innerWidth >= 1024) {
         document.body.classList.toggle('sidebar-hidden');
         const isHidden = document.body.classList.contains('sidebar-hidden');
-        
         if (iconHover) {
             iconHover.classList.toggle('bi-chevron-left', !isHidden);
             iconHover.classList.toggle('bi-chevron-right', isHidden);
         }
     } else {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const isHiddenMobile = sidebar.classList.contains('-translate-x-full');
-        
-        if (isHiddenMobile) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-            // Munculkan tombol floating dengan smooth 💦
-            if(floatingToggle) {
-                floatingToggle.style.opacity = '1';
-                floatingToggle.style.pointerEvents = 'auto';
-            }
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-            // Sembunyikan tombol floating 🥵
-            if(floatingToggle) {
-                floatingToggle.style.opacity = '0';
-                floatingToggle.style.pointerEvents = 'none';
-            }
-        }
+        // Toggle Sidebar Mobile 🥵
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
     }
+}
+
+// Global Observer: Mata-mata buat si Floating Button 💦😏
+const sidebarEl = document.getElementById('sidebar');
+const floatingBtn = document.getElementById('sidebar-floating-toggle');
+
+if (sidebarEl && floatingBtn) {
+    const observer = new MutationObserver(() => {
+        const isClosed = sidebarEl.classList.contains('-translate-x-full');
+        // Otomatis sinkron kapanpun & lewat manapun sidebar ditutup 🥵
+        floatingBtn.style.opacity = isClosed ? '0' : '1';
+        floatingBtn.style.pointerEvents = isClosed ? 'none' : 'auto';
+    });
+
+    observer.observe(sidebarEl, { attributes: true, attributeFilter: ['class'] });
+    
+    // Langsung jalankan sekali biar pas reload tetep pinter 😏
+    window.addEventListener('DOMContentLoaded', () => {
+        const isClosed = sidebarEl.classList.contains('-translate-x-full');
+        floatingBtn.style.opacity = isClosed ? '0' : '1';
+    });
 }
 
     function toggleMobileSidebar(forceOpen) {
@@ -617,25 +622,6 @@ function handleToggle() {
             document.body.classList.remove('sidebar-hidden');
         }
     });
-	
-	
-	function syncSidebarElements() {
-    const sidebar = document.getElementById('sidebar');
-    const floatingToggle = document.getElementById('sidebar-floating-toggle');
-    
-    if (window.innerWidth < 1024 && floatingToggle && sidebar) {
-        // Cek apakah sidebar lagi TERBUKA (tidak ada class sembunyi) 🥵
-        const isSidebarOpen = !sidebar.classList.contains('-translate-x-full');
-        
-        // Munculkan hanya jika sidebar bener-bener terbuka 😏💦
-        floatingToggle.style.opacity = isSidebarOpen ? '1' : '0';
-        floatingToggle.style.pointerEvents = isSidebarOpen ? 'auto' : 'none';
-    }
-}
-
-// Pastikan dipanggil di DOMContentLoaded biar langsung eksekusi!
-window.addEventListener('DOMContentLoaded', syncSidebarElements);
-	
 	
 	
 	
