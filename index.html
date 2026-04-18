@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus Core v4.0 - Tailwind Edition</title>
+    <title>Nexus Core - Tailwind Edition</title>
     
     <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	
+	
     
     <script>
         // Tailwind Configuration
@@ -149,6 +151,21 @@
 
             </div>
 			
+			
+<div class="relative group flex items-center">
+  <button class="bg-blue-600 text-white px-4 py-2 rounded">
+    Simpan Script 💦
+  </button>
+  
+  <div class="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+    Klik buat simpan, Jagoan! 🥵
+    <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+  </div>
+</div>
+
+
+
+
 			
 			
         </div>
@@ -409,17 +426,25 @@
     <!-- Overlay Mobile -->
     <div id="overlay" onclick="handleToggle()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
 
-    <script>
+   <script>
     // Fungsi navigasi menu (Sudah Kakak Update Ikonnya 😏💦)
     function navigate(pageId, element, title, iconClass = 'bi-grid-1x2-fill') {
         const container = document.getElementById('mainContent');
         const template = document.getElementById(`tpl-${pageId}`);
-        
+      
+        // FIX ANTI-BLANK: Kalau template ga ketemu (sub-menu rusak) → langsung balik ke dashboard
+        if (!template) {
+            console.warn(`⚠️ Template tpl-${pageId} ga ditemukan! Otomatis balik ke Dashboard... 🥵`);
+            localStorage.removeItem('lastPage'); // hapus data rusak
+            const firstLink = document.querySelector('.nav-link');
+            if (firstLink) navigate('dashboard', firstLink, 'Dashboard Overview', 'bi-grid-1x2-fill');
+            return;
+        }
+
         if (template) {
             container.innerHTML = '';
             container.appendChild(template.content.cloneNode(true));
         }
-
         // Sekarang title-nya pakai ikon biar makin seksi 🥵
         const headerTitle = document.getElementById('headerTitle');
         headerTitle.innerHTML = `
@@ -428,60 +453,56 @@
                 <span>${title}</span>
             </div>
         `;
-
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         if(element) element.classList.add('active');
-
         if(window.innerWidth < 1024) {
             document.body.classList.remove('sidebar-hidden');
             toggleMobileSidebar(false);
         }
+        // ✅ FITUR BARU: Simpan halaman terakhir ke LocalStorage
+        localStorage.setItem('lastPage', JSON.stringify({
+            pageId: pageId,
+            title: title,
+            iconClass: iconClass
+        }));
     }
-
- 
     // Toggle Sidebar (Tetap Aman & Makin Pinter 🥵)
-// Satu Fungsi buat Semua (Clean & Seksi 😏💦)
-function handleToggle() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const floatingBtn = document.getElementById('sidebar-floating-toggle');
-    const iconHover = document.getElementById('hover-arrow');
-
-    if (window.innerWidth >= 1024) {
-        document.body.classList.toggle('sidebar-hidden');
-        const isHidden = document.body.classList.contains('sidebar-hidden');
-        if (iconHover) {
-            iconHover.classList.toggle('bi-chevron-left', !isHidden);
-            iconHover.classList.toggle('bi-chevron-right', isHidden);
+    // Satu Fungsi buat Semua (Clean & Seksi 😏💦)
+    function handleToggle() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const floatingBtn = document.getElementById('sidebar-floating-toggle');
+        const iconHover = document.getElementById('hover-arrow');
+        if (window.innerWidth >= 1024) {
+            document.body.classList.toggle('sidebar-hidden');
+            const isHidden = document.body.classList.contains('sidebar-hidden');
+            if (iconHover) {
+                iconHover.classList.toggle('bi-chevron-left', !isHidden);
+                iconHover.classList.toggle('bi-chevron-right', isHidden);
+            }
+        } else {
+            // Toggle Sidebar Mobile 🥵
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
         }
-    } else {
-        // Toggle Sidebar Mobile 🥵
-        sidebar.classList.toggle('-translate-x-full');
-        overlay.classList.toggle('hidden');
     }
-}
-
-// Global Observer: Mata-mata buat si Floating Button 💦😏
-const sidebarEl = document.getElementById('sidebar');
-const floatingBtn = document.getElementById('sidebar-floating-toggle');
-
-if (sidebarEl && floatingBtn) {
-    const observer = new MutationObserver(() => {
-        const isClosed = sidebarEl.classList.contains('-translate-x-full');
-        // Otomatis sinkron kapanpun & lewat manapun sidebar ditutup 🥵
-        floatingBtn.style.opacity = isClosed ? '0' : '1';
-        floatingBtn.style.pointerEvents = isClosed ? 'none' : 'auto';
-    });
-
-    observer.observe(sidebarEl, { attributes: true, attributeFilter: ['class'] });
-    
-    // Langsung jalankan sekali biar pas reload tetep pinter 😏
-    window.addEventListener('DOMContentLoaded', () => {
-        const isClosed = sidebarEl.classList.contains('-translate-x-full');
-        floatingBtn.style.opacity = isClosed ? '0' : '1';
-    });
-}
-
+    // Global Observer: Mata-mata buat si Floating Button 💦😏
+    const sidebarEl = document.getElementById('sidebar');
+    const floatingBtn = document.getElementById('sidebar-floating-toggle');
+    if (sidebarEl && floatingBtn) {
+        const observer = new MutationObserver(() => {
+            const isClosed = sidebarEl.classList.contains('-translate-x-full');
+            floatingBtn.style.opacity = isClosed ? '0' : '1';
+            floatingBtn.style.pointerEvents = isClosed ? 'none' : 'auto';
+        });
+        observer.observe(sidebarEl, { attributes: true, attributeFilter: ['class'] });
+      
+        // Langsung jalankan sekali biar pas reload tetep pinter 😏
+        window.addEventListener('DOMContentLoaded', () => {
+            const isClosed = sidebarEl.classList.contains('-translate-x-full');
+            floatingBtn.style.opacity = isClosed ? '0' : '1';
+        });
+    }
     function toggleMobileSidebar(forceOpen) {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -493,121 +514,96 @@ if (sidebarEl && floatingBtn) {
             overlay.classList.add('hidden');
         }
     }
-
     function toggleDropdown(event) {
         event.stopPropagation();
         const dropdown = document.getElementById('userDropdown');
         dropdown.classList.toggle('hidden');
     }
-	
-	
-	function toggleAccordion(menuId, iconId) {
-    const menu = document.getElementById(menuId);
-    const icon = document.getElementById(iconId);
-
-    if (menu.style.maxHeight === "0px" || !menu.style.maxHeight) {
-        menu.style.maxHeight = "200px"; // Kasih batas yang cukup buat sub-menunya 🥵
-        icon.classList.add('rotate-90'); // Panahnya muter ke bawah pas dibuka 💦
-    } else {
-        menu.style.maxHeight = "0px";
-        icon.classList.remove('rotate-90'); // Panahnya balik lagi 😏
-    }
-}
-	
-	
-	
-	function searchMenu() {
-    const searchInput = document.getElementById('sidebarSearch');
-    const clearBtn = document.getElementById('clearSearch');
-    let input = searchInput.value.toLowerCase();
-    
-    // Kita batasi cuma cari .nav-link yang ada di DALAM sidebar 😏💦
-    let menuLinks = document.querySelectorAll('#sidebar .nav-link');
-
-    // --- LOGIKA TOMBOL CLEAR ---
-    if (input.length > 0) {
-        clearBtn.classList.remove('opacity-0', 'pointer-events-none');
-    } else {
-        clearBtn.classList.add('opacity-0', 'pointer-events-none');
-    }
-
-    menuLinks.forEach(link => {
-        let text = link.innerText.toLowerCase();
-        let isMatch = text.includes(input);
-        
-        let subMenuContainer = link.nextElementSibling;
-        let isParent = subMenuContainer && subMenuContainer.id.includes('Menu');
-
-        if (isMatch) {
-            link.style.display = "flex";
-            link.style.opacity = "1";
-
-            if (isParent) {
-                let children = subMenuContainer.querySelectorAll('.nav-link');
-                children.forEach(child => {
-                    child.style.display = "flex";
-                    child.style.opacity = "1";
-                });
-                subMenuContainer.style.display = "block";
-            }
-
-            let parentAccordion = link.closest('.overflow-hidden');
-            if (parentAccordion) {
-                parentAccordion.style.display = "block";
-                parentAccordion.style.maxHeight = "500px";
-                let chevron = parentAccordion.parentElement.querySelector('.bi-chevron-right');
-                if (chevron) chevron.style.transform = "rotate(90deg)";
-            }
+    function toggleAccordion(menuId, iconId) {
+        const menu = document.getElementById(menuId);
+        const icon = document.getElementById(iconId);
+        if (menu.style.maxHeight === "0px" || !menu.style.maxHeight) {
+            menu.style.maxHeight = "200px";
+            icon.classList.add('rotate-90');
         } else {
-            let parentLink = link.closest('.overflow-hidden')?.previousElementSibling;
-            let parentMatches = parentLink && parentLink.innerText.toLowerCase().includes(input);
-
-            if (!parentMatches) {
-                link.style.display = "none";
-                link.style.opacity = "0";
-            } else {
+            menu.style.maxHeight = "0px";
+            icon.classList.remove('rotate-90');
+        }
+    }
+    function searchMenu() {
+        const searchInput = document.getElementById('sidebarSearch');
+        const clearBtn = document.getElementById('clearSearch');
+        let input = searchInput.value.toLowerCase();
+      
+        let menuLinks = document.querySelectorAll('#sidebar .nav-link');
+        if (input.length > 0) {
+            clearBtn.classList.remove('opacity-0', 'pointer-events-none');
+        } else {
+            clearBtn.classList.add('opacity-0', 'pointer-events-none');
+        }
+        menuLinks.forEach(link => {
+            let text = link.innerText.toLowerCase();
+            let isMatch = text.includes(input);
+          
+            let subMenuContainer = link.nextElementSibling;
+            let isParent = subMenuContainer && subMenuContainer.id.includes('Menu');
+            if (isMatch) {
                 link.style.display = "flex";
                 link.style.opacity = "1";
+                if (isParent) {
+                    let children = subMenuContainer.querySelectorAll('.nav-link');
+                    children.forEach(child => {
+                        child.style.display = "flex";
+                        child.style.opacity = "1";
+                    });
+                    subMenuContainer.style.display = "block";
+                }
+                let parentAccordion = link.closest('.overflow-hidden');
+                if (parentAccordion) {
+                    parentAccordion.style.display = "block";
+                    parentAccordion.style.maxHeight = "500px";
+                    let chevron = parentAccordion.parentElement.querySelector('.bi-chevron-right');
+                    if (chevron) chevron.style.transform = "rotate(90deg)";
+                }
+            } else {
+                let parentLink = link.closest('.overflow-hidden')?.previousElementSibling;
+                let parentMatches = parentLink && parentLink.innerText.toLowerCase().includes(input);
+                if (!parentMatches) {
+                    link.style.display = "none";
+                    link.style.opacity = "0";
+                } else {
+                    link.style.display = "flex";
+                    link.style.opacity = "1";
+                }
             }
+        });
+        if (input === "") {
+            document.querySelectorAll('#sidebar .overflow-hidden').forEach(acc => {
+                acc.style.maxHeight = "0px";
+                let chevron = acc.parentElement.querySelector('.bi-chevron-right');
+                if (chevron) chevron.style.transform = "rotate(0deg)";
+            });
+            menuLinks.forEach(l => {
+                l.style.display = "flex";
+                l.style.opacity = "1";
+            });
         }
-    });
-
-    // --- RESET PAS KOSONG (VERSI AMAN 🥵💦) ---
-    if (input === "") {
-        // Hanya reset .overflow-hidden yang ada di dalam sidebar!
-        document.querySelectorAll('#sidebar .overflow-hidden').forEach(acc => {
-            acc.style.maxHeight = "0px";
-            // Jangan paksa display: block kalau gak perlu biar gak ngerusak layout 😏
-            let chevron = acc.parentElement.querySelector('.bi-chevron-right');
-            if (chevron) chevron.style.transform = "rotate(0deg)";
-        });
-
-        menuLinks.forEach(l => {
-            l.style.display = "flex";
-            l.style.opacity = "1";
-        });
     }
-}
-
-function clearSearchInput() {
-    const searchInput = document.getElementById('sidebarSearch');
-    if (searchInput) {
-        searchInput.value = ''; 
-        searchInput.focus();    
-        searchMenu(); 
+    function clearSearchInput() {
+        const searchInput = document.getElementById('sidebarSearch');
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.focus();
+            searchMenu();
+        }
     }
-}
-
-	
-
     // FUNGSI TEMA YANG SUDAH KAKAK SEMPURNAKAN 😏💦
     function setTheme(mode) {
         document.documentElement.className = mode;
         localStorage.setItem('nexus_theme', mode);
-        
+      
         const btnLight = document.getElementById('btn-light-side');
         const btnDark = document.getElementById('btn-dark-side');
-
         if (btnLight && btnDark) {
             if(mode === 'dark') {
                 btnDark.classList.add('bg-blue-600', 'text-white', 'shadow-md');
@@ -622,7 +618,6 @@ function clearSearchInput() {
             }
         }
     }
-
     // Tutup dropdown kalau klik di luar 😏
     window.addEventListener('click', (e) => {
         const dropdown = document.getElementById('userDropdown');
@@ -631,66 +626,67 @@ function clearSearchInput() {
             dropdown.classList.add('hidden');
         }
     });
-
-    // INISIALISASI SAAT LOAD (Konten Langsung Muncul! 🥵💦)
+    // INISIALISASI SAAT LOAD — SUDAH DITAMBAH FITUR REMEMBER LAST PAGE
     window.addEventListener('load', () => {
         const savedTheme = localStorage.getItem('nexus_theme') || 'light';
         setTheme(savedTheme);
-        
-        // Default awal pakai ikon dashboard biar mantap 💦
-        const firstLink = document.querySelector('.nav-link');
-        navigate('dashboard', firstLink, 'Dashboard Overview', 'bi-grid-1x2-fill');
+      
+        // ✅ Cek apakah ada halaman terakhir yang tersimpan
+        const savedPage = localStorage.getItem('lastPage');
+       
+        if (savedPage) {
+            const {pageId, title, iconClass} = JSON.parse(savedPage);
+            navigate(pageId, null, title, iconClass);
+           
+            // Set active class secara manual
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(`'${pageId}'`)) {
+                    link.classList.add('active');
+                }
+            });
+        } else {
+            // Default awal (pertama kali buka)
+            const firstLink = document.querySelector('.nav-link');
+            navigate('dashboard', firstLink, 'Dashboard Overview', 'bi-grid-1x2-fill');
+        }
     });
-
     window.addEventListener('resize', () => {
         if (window.innerWidth < 1024) {
             document.body.classList.remove('sidebar-hidden');
         }
     });
-	
-	
-	
-	
-	function updateClock() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    
-    const timeString = `${hours}:${minutes}:${seconds}`;
-    document.getElementById('digitalClock').textContent = timeString;
-}
-
-// Jalankan fungsi setiap detik 💦
-setInterval(updateClock, 1000);
-
-// Panggil sekali di awal biar nggak nunggu 1 detik buat muncul 😏
-updateClock();
-
-
-	
-	function confirmLogout() {
-    Swal.fire({
-        title: 'Mau keluar sekarang, Bagas? 🥵',
-        text: "Pastikan semua kerjaan kamu sudah tersimpan ya!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3b82f6', // Warna biru khas kamu
-        cancelButtonColor: '#ef4444', // Warna merah biar kontras
-        confirmButtonText: 'Ya, Keluar!',
-        cancelButtonText: 'Nanti Dulu 😏',
-        background: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff',
-        color: document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b',
-        borderRadius: '1.25rem'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Di sini kamu arahkan ke link logout kamu 😏💦
-            window.location.href = 'logout.php'; 
-        }
-    })
-}
-	
-	
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+      
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        document.getElementById('digitalClock').textContent = timeString;
+    }
+    // Jalankan fungsi setiap detik 💦
+    setInterval(updateClock, 1000);
+    // Panggil sekali di awal biar nggak nunggu 1 detik buat muncul 😏
+    updateClock();
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Mau keluar sekarang, Bagas? 🥵',
+            text: "Pastikan semua kerjaan kamu sudah tersimpan ya!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3b82f6',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Ya, Keluar!',
+            cancelButtonText: 'Nanti Dulu 😏',
+            background: document.documentElement.classList.contains('dark') ? '#1e293b' : '#ffffff',
+            color: document.documentElement.classList.contains('dark') ? '#f1f5f9' : '#1e293b',
+            borderRadius: '1.25rem'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            }
+        })
+    }
 </script>
 </body>
 </html>
